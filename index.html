@@ -43,7 +43,10 @@ button{
     cursor:pointer;
     opacity:0;
     pointer-events:none;
-    transition:opacity 2s ease;
+    transition:
+        opacity 1.5s ease,
+        transform .25s ease,
+        box-shadow .25s ease;
 }
 button.show{opacity:1;pointer-events:auto;}
 
@@ -53,6 +56,24 @@ button.show{opacity:1;pointer-events:auto;}
     animation:pulse 1.7s infinite;
 }
 @keyframes pulse{50%{transform:scale(1.08);}}
+
+/* 🎂 Birthday button animations */
+#birthdayBtn{
+    background:#ff69b4;
+    color:#000;
+}
+
+/* Hover (desktop) */
+#birthdayBtn:hover{
+    transform:translateY(-3px) scale(1.05);
+    box-shadow:0 10px 25px rgba(255,105,180,.45);
+}
+
+/* Click / Tap (mobile + desktop) */
+#birthdayBtn:active{
+    transform:scale(.92);
+    box-shadow:0 5px 12px rgba(255,105,180,.35);
+}
 
 /******** SCREENS ********/
 .screen{
@@ -109,7 +130,7 @@ canvas{
 
 <!-- HOME -->
 <div id="screen-home" class="screen">
-    <button id="celebrateBtn" class="show">Go Ahead 🎉</button>
+    <button id="celebrateBtn" class="show">🎉 Celebrate</button>
 </div>
 
 <!-- SHORT NOTE -->
@@ -123,6 +144,11 @@ canvas{
 <div id="screen-count" class="screen">
     <h2>⏳</h2>
     <div id="countdownText"></div>
+
+    <!-- Birthday Button -->
+    <button id="birthdayBtn">
+        🎂 Go to Birthday Page
+    </button>
 </div>
 
 </div>
@@ -142,7 +168,8 @@ const home=document.getElementById("screen-home"),
       count=document.getElementById("screen-count"),
       celebrateBtn=document.getElementById("celebrateBtn"),
       noteText=document.getElementById("noteText"),
-      countdownText=document.getElementById("countdownText");
+      countdownText=document.getElementById("countdownText"),
+      birthdayBtn=document.getElementById("birthdayBtn");
 
 /******** CANVAS SIZE ********/
 function size(){
@@ -187,6 +214,12 @@ celebrateBtn.onclick=()=>{
             countdownText.style.opacity="1";
         },100);
         startCountdown();
+
+        /* show birthday button */
+        setTimeout(()=>{
+            birthdayBtn.classList.add("show");
+        },1200);
+
     },7800);
 };
 
@@ -207,6 +240,11 @@ function startCountdown(){
     },1000);
 }
 
+/******** REDIRECT ********/
+birthdayBtn.onclick=()=>{
+    window.location.href="https://happy-birthday-varshaaa.vercel.app";
+};
+
 /******** FIREWORKS ********/
 function fire(mega=false){
     let count=innerWidth<500?(mega?70:35):(mega?130:65),
@@ -215,8 +253,7 @@ function fire(mega=false){
         parts=[];
     for(let i=0;i<count;i++){
         parts.push({
-            x,y,
-            a:Math.random()*360,
+            x,y,a:Math.random()*360,
             s:Math.random()*2+1,
             r:mega?3:2,
             c:`hsl(${Math.random()*360},100%,50%)`,
