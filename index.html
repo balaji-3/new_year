@@ -3,35 +3,58 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
-<title>Happy New Year 🎆</title>
+<title>❤️</title>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif;}
 
 body{
-    background:#00172b;color:white;overflow:hidden;
+    background:#00172b;
+    color:white;
     height:100vh;width:100vw;
-    display:flex;justify-content:center;align-items:center;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
 }
 
+/******** MAIN BOX ********/
 .main-box{
-    position:relative;z-index:5;
-    width:90%;max-width:500px;height:85vh;
-    display:flex;flex-direction:column;justify-content:center;
-    align-items:center;text-align:center;gap:1.1rem;
+    position:relative;
+    z-index:5;
+    width:90%;
+    max-width:500px;
+    height:85vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    gap:1.1rem;
 }
 
-/******** Buttons ********/
+/******** BUTTONS ********/
 button{
-    padding:12px 26px;font-size:1.1rem;font-weight:700;
-    border:none;border-radius:40px;cursor:pointer;
-    opacity:0;pointer-events:none;transition:opacity 2s ease;
+    padding:12px 26px;
+    font-size:1.1rem;
+    font-weight:700;
+    border:none;
+    border-radius:40px;
+    cursor:pointer;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 2s ease;
 }
 button.show{opacity:1;pointer-events:auto;}
-#celebrateBtn{background:#ffd700;color:#000;animation:pulse 1.7s infinite;}
+
+#celebrateBtn{
+    background:#ffd700;
+    color:#000;
+    animation:pulse 1.7s infinite;
+}
 @keyframes pulse{50%{transform:scale(1.08);}}
 
-/******** Screens ********/
+/******** SCREENS ********/
 .screen{
     display:none;
     flex-direction:column;
@@ -41,34 +64,38 @@ button.show{opacity:1;pointer-events:auto;}
     transition:opacity 1.5s ease;
 }
 #screen-home{display:flex;opacity:1;}
+#screen-note{transition:opacity 2s ease;}
+#screen-count{transition:opacity 1.5s ease;}
 
-/* fade-out updated from 1.5s → 2s */
-#screen-note{
-    transition:opacity 2s ease;
+/******** TEXT ********/
+#noteText{
+    font-size:1.4rem;
+    opacity:0;
+    transition:opacity 1.5s ease;
 }
-
-#screen-final{transition:opacity 2.6s ease;}
-#screen-count{}
-
-/******** Text ********/
-#noteText{font-size:1.4rem;opacity:0;transition:opacity 1.5s;}
-#finalMsg{font-size:2.2rem;font-weight:800;opacity:0;transition:opacity 2s;}
-#finalWish{opacity:0;font-size:1.1rem;margin-top:8px;transition:opacity 2s;}
-#nextFinal{background:#00e1ff;color:#000;opacity:0;transition:opacity 2s;margin-top:10px;}
 
 #countdownText{
-    font-size:1.6rem;font-weight:bold;background:#0004;padding:8px 16px;
-    border-radius:10px;opacity:0;transition:opacity 1s;
+    font-size:1.6rem;
+    font-weight:bold;
+    background:rgba(0,0,0,.35);
+    padding:10px 18px;
+    border-radius:10px;
+    opacity:0;
+    transition:opacity 1s ease;
 }
 
-/******** Canvas ********/
+/******** CANVAS ********/
 canvas{
-    position:absolute;top:0;left:0;width:100%;height:100%;
-    z-index:1;pointer-events:none;
+    position:absolute;
+    top:0;left:0;
+    width:100%;height:100%;
+    z-index:1;
+    pointer-events:none;
 }
 
 @media(max-width:420px){
-    #finalMsg{font-size:1.9rem;}
+    #noteText{font-size:1.2rem;}
+    #countdownText{font-size:1.4rem;}
     button{font-size:1rem;}
 }
 </style>
@@ -87,156 +114,179 @@ canvas{
 
 <!-- SHORT NOTE -->
 <div id="screen-note" class="screen">
-    <h2 id="noteText">I'm not someone who usually celebrates these days, but that won't stop me from wishing you well</h2>
-</div>
-
-<!-- FINAL -->
-<div id="screen-final" class="screen">
-    <h1 id="finalMsg">✨ Happy New Year, Varshaaa ✨</h1>
-    <p id="finalWish">May it gently close old chapters and open your heart to new beginnings 💛</p>
-    <button id="nextFinal">What's Next?👀</button>
+    <h2 id="noteText">
+        I'm not someone who usually celebrates these days, but that won't stop me from wishing you well
+    </h2>
 </div>
 
 <!-- COUNTDOWN -->
 <div id="screen-count" class="screen">
     <h2>⏳</h2>
     <div id="countdownText"></div>
-    <button id="backBtn" style="background:#ffd700;color:#000">Back</button>
 </div>
 
 </div>
 
-<audio id="music" src="https://cdn.pixabay.com/download/audio/2023/02/28/audio_4c89962041.mp3?filename=new-year-party-135795.mp3"></audio>
+<audio id="music"
+src="https://cdn.pixabay.com/download/audio/2023/02/28/audio_4c89962041.mp3?filename=new-year-party-135795.mp3">
+</audio>
 
 <script>
 /******** ELEMENTS ********/
-const canvas=document.getElementById("fireCanvas"),ctx=canvas.getContext("2d");
-const music=document.getElementById("music");
+const canvas=document.getElementById("fireCanvas"),
+      ctx=canvas.getContext("2d"),
+      music=document.getElementById("music");
 
-const home=document.getElementById("screen-home");
-const note=document.getElementById("screen-note");
-const final=document.getElementById("screen-final");
-const count=document.getElementById("screen-count");
+const home=document.getElementById("screen-home"),
+      note=document.getElementById("screen-note"),
+      count=document.getElementById("screen-count"),
+      celebrateBtn=document.getElementById("celebrateBtn"),
+      noteText=document.getElementById("noteText"),
+      countdownText=document.getElementById("countdownText");
 
-const celebrateBtn=document.getElementById("celebrateBtn");
-const noteText=document.getElementById("noteText");
-const finalMsg=document.getElementById("finalMsg");
-const finalWish=document.getElementById("finalWish");
-const nextFinal=document.getElementById("nextFinal");
-const countdownText=document.getElementById("countdownText");
-const backBtn=document.getElementById("backBtn");
+/******** CANVAS SIZE ********/
+function size(){
+    canvas.width=innerWidth;
+    canvas.height=innerHeight;
+}
+size();
+addEventListener("resize",size);
 
-/******** Canvas Fit ********/
-function size(){canvas.width=innerWidth;canvas.height=innerHeight;}
-size();addEventListener("resize",size);
-
-/******** CELEBRATE ********/
+/******** CELEBRATE FLOW ********/
 celebrateBtn.onclick=()=>{
     celebrateBtn.classList.remove("show");
-    music.play(); startFireworksMobile(); dropConfetti(); floatWords();
+    music.play();
 
+    startFireworks();
+    dropConfetti();
+    floatWords();
+
+    /* HOME → NOTE */
     home.style.opacity="0";
     setTimeout(()=>{
         home.style.display="none";
         note.style.display="flex";
-        setTimeout(()=>{note.style.opacity="1";noteText.style.opacity="1";},100);
+        setTimeout(()=>{
+            note.style.opacity="1";
+            noteText.style.opacity="1";
+        },100);
     },800);
 
-    /* fade-out stays 3s -> fade 2s */
-    setTimeout(()=>{note.style.opacity="0";noteText.style.opacity="0";},5800);
+    /* NOTE visible 5s → fade out 2s */
+    setTimeout(()=>{
+        note.style.opacity="0";
+        noteText.style.opacity="0";
+    },5800);
 
-    /* final starts slightly later = 3s + 2s fade */
+    /* NOTE → COUNTDOWN */
     setTimeout(()=>{
         note.style.display="none";
-        final.style.display="flex";
-
-        setTimeout(()=>final.style.opacity="1",150);
-        setTimeout(()=>finalMsg.style.opacity="1",900);
-        setTimeout(()=>finalWish.style.opacity="1",1500);
-        setTimeout(()=>{nextFinal.style.opacity="1";nextFinal.style.pointerEvents="auto";},2200);
-        setInterval(()=>fire(),900);
-    },7800);
-};
-
-/******** FINAL → COUNTDOWN fade ********/
-nextFinal.onclick=()=>{
-    final.style.opacity="0";
-    setTimeout(()=>{
-        final.style.display="none";
         count.style.display="flex";
-        setTimeout(()=>count.style.opacity="1",100);
+        setTimeout(()=>{
+            count.style.opacity="1";
+            countdownText.style.opacity="1";
+        },100);
         startCountdown();
-        backBtn.classList.add("show");
-    },900);
-};
-
-/******** BACK → FINAL fade ********/
-backBtn.onclick=()=>{
-    count.style.opacity="0";
-    setTimeout(()=>{
-        count.style.display="none";
-        final.style.display="flex";
-        setTimeout(()=>final.style.opacity="1",150);
-    },900);
+    },7800);
 };
 
 /******** COUNTDOWN ********/
 function startCountdown(){
-    countdownText.style.opacity="1";
-    let target=new Date("Jan 19, 2026 00:00:00").getTime();
+    const target=new Date("Jan 19, 2026 00:00:00").getTime();
     setInterval(()=>{
-        let d=target-Date.now();
-        if(d<=0)return countdownText.innerHTML="🎉 It's Time!";
-        countdownText.innerHTML=
-        `${Math.floor(d/864e5)}d ${Math.floor(d%864e5/36e5)}h ${Math.floor(d%36e5/6e4)}m ${Math.floor(d%6e4/1e3)}s`;
+        const diff=target-Date.now();
+        if(diff<=0){
+            countdownText.innerHTML="🎉 It's Time!";
+            return;
+        }
+        const d=Math.floor(diff/86400000);
+        const h=Math.floor((diff%86400000)/3600000);
+        const m=Math.floor((diff%3600000)/60000);
+        const s=Math.floor((diff%60000)/1000);
+        countdownText.innerHTML=`${d}d ${h}h ${m}m ${s}s`;
     },1000);
 }
 
-/******** Fireworks / Confetti / Words ********/
+/******** FIREWORKS ********/
 function fire(mega=false){
-    let c=innerWidth<500?(mega?70:35):(mega?130:65),
-    x=Math.random()*innerWidth,y=Math.random()*innerHeight*.4,parts=[];
-    for(let i=0;i<c;i++)parts.push({x,y,a:Math.random()*360,s:Math.random()*2+1,
-        r:mega?3:2,col:`hsl(${Math.random()*360},100%,50%)`,life:mega?120:80});
+    let count=innerWidth<500?(mega?70:35):(mega?130:65),
+        x=Math.random()*innerWidth,
+        y=Math.random()*innerHeight*0.4,
+        parts=[];
+    for(let i=0;i<count;i++){
+        parts.push({
+            x,y,
+            a:Math.random()*360,
+            s:Math.random()*2+1,
+            r:mega?3:2,
+            c:`hsl(${Math.random()*360},100%,50%)`,
+            life:mega?120:80
+        });
+    }
     let anim=setInterval(()=>{
         ctx.fillStyle="rgba(0,0,0,.15)";
         ctx.fillRect(0,0,innerWidth,innerHeight);
-        parts.forEach(o=>{
-            let r=o.a*Math.PI/180;o.x+=Math.cos(r)*o.s;o.y+=Math.sin(r)*o.s;o.life--;
-            ctx.beginPath();ctx.arc(o.x,o.y,o.r,0,6.28);ctx.fillStyle=o.col;ctx.fill();
-            if(o.life<=0)clearInterval(anim);
+        parts.forEach(p=>{
+            let r=p.a*Math.PI/180;
+            p.x+=Math.cos(r)*p.s;
+            p.y+=Math.sin(r)*p.s;
+            p.life--;
+            ctx.beginPath();
+            ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+            ctx.fillStyle=p.c;
+            ctx.fill();
+            if(p.life<=0)clearInterval(anim);
         });
     },18);
 }
-function startFireworksMobile(){setInterval(()=>fire(),700);setInterval(()=>fire(true),3500);}
+function startFireworks(){
+    setInterval(()=>fire(),700);
+    setInterval(()=>fire(true),3500);
+}
+
+/******** CONFETTI ********/
 function dropConfetti(){
     let n=innerWidth<500?40:80;
     for(let i=0;i<n;i++){
         let e=document.createElement("div");
-        e.style=`width:6px;height:6px;border-radius:2px;position:absolute;top:-10px;z-index:20;
-        background:hsl(${Math.random()*360},100%,50%);left:${Math.random()*innerWidth}px;`;
+        e.style=`
+            width:6px;height:6px;border-radius:2px;
+            position:absolute;top:-10px;z-index:20;
+            background:hsl(${Math.random()*360},100%,50%);
+            left:${Math.random()*innerWidth}px;
+        `;
         document.body.appendChild(e);
         let fall=setInterval(()=>{
             e.style.top=parseInt(e.style.top)+3+"px";
             e.style.left=parseInt(e.style.left)+(Math.random()*4-2)+"px";
-            if(parseInt(e.style.top)>innerHeight){e.remove();clearInterval(fall);}
+            if(parseInt(e.style.top)>innerHeight){
+                e.remove();
+                clearInterval(fall);
+            }
         },22);
     }
 }
+
+/******** FLOATING WORDS ********/
 function floatWords(){
-    const w=["Joy","Love","Peace","Hope","Warmth","Growth","Happiness"];
+    const words=["Joy","Love","Peace","Hope","Warmth","Growth","Happiness"];
     setInterval(()=>{
         let t=document.createElement("div");
-        t.innerHTML=w[Math.floor(Math.random()*w.length)];
-        t.style=`position:absolute;font-size:.9rem;opacity:.85;z-index:18;
-        left:${Math.random()*innerWidth}px;top:${innerHeight}px;
-        color:hsl(${Math.random()*360},100%,75%);
-        animation:floatUp 6s linear forwards;`;
+        t.innerHTML=words[Math.floor(Math.random()*words.length)];
+        t.style=`
+            position:absolute;
+            font-size:.9rem;
+            opacity:.85;
+            z-index:18;
+            left:${Math.random()*innerWidth}px;
+            top:${innerHeight}px;
+            color:hsl(${Math.random()*360},100%,75%);
+            animation:floatUp 6s linear forwards;
+        `;
         document.body.appendChild(t);
     },900);
 }
 </script>
+
 </body>
 </html>
-
-
